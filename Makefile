@@ -2,7 +2,7 @@ CC=gcc
 CFLAGS=-Wall -g
 LDLIBS=-lX11
 
-PROGRAM=myprogram
+PROGRAM=quickpick
 
 $(PROGRAM): $(PROGRAM).o
 	$(CC) $(CFLAGS) -o $@ $^ $(LDLIBS)
@@ -12,3 +12,6 @@ $(PROGRAM).o: $(PROGRAM).c
 
 clean:
 	rm -f $(PROGRAM) *.o
+
+install:
+	cp $(PROGRAM) /usr/local/bin/

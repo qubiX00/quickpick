@@ -10,6 +10,19 @@ void notify(const char* message) {
     system(command);
 }
 
+int isXclipInstalled() {
+    const char* command = "which xclip";
+    FILE* file = popen(command, "r");
+    if (file == NULL) {
+        printf("Error executing the command\n");
+        return 0;
+    }
+    char result[256];
+    fgets(result, sizeof(result), file);
+    pclose(file);
+    return (strlen(result) > 0);
+}
+
 int main() {
     // Open a connection to the X server
     Display* display = XOpenDisplay(NULL);
@@ -57,9 +70,13 @@ int main() {
     snprintf(hexcode, 8, "#%06lX", pixel & 0xFFFFFF);
 
     // Copy the hex string to the clipboard
-    char clipboard_cmd[256];
-    snprintf(clipboard_cmd, 256, "echo -n \"%s\" | xclip -selection clipboard", hexcode);
-    system(clipboard_cmd);
+	if (isXclipInstalled()) {
+		char clipboard_cmd[256];
+		snprintf(clipboard_cmd, 256, "echo -n \"%s\" | xclip -selection clipboard", hexcode);
+		system(clipboard_cmd);
+	} else {
+		printf("\nxclip is not installed, failed to copy hexcode!\nhttps://github.com/astrand/xclip/blob/master/INSTALL\n");
+	}
 
     // Notify the user
     char message[256];
