@@ -10,8 +10,9 @@ $(PROGRAM): $(PROGRAM).o
 $(PROGRAM).o: $(PROGRAM).c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-clean:
+uninstall:
 	rm -f $(PROGRAM) *.o
+	rm -f /usr/local/bin/$(PROGRAM)
 
 install:
 	cp $(PROGRAM) /usr/local/bin/
